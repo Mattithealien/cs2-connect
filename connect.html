@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connecting to server…</title>
+<style>
+  body {
+    background: #23272a;
+    color: #f2f3f5;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  .card { max-width: 420px; }
+  h1 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+  p { color: #b9bbbe; line-height: 1.5; }
+  code {
+    background: #2f3136;
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 10px 0;
+    font-size: 0.95rem;
+    word-break: break-all;
+  }
+  a.btn {
+    display: inline-block;
+    margin-top: 14px;
+    background: #5865f2;
+    color: white;
+    text-decoration: none;
+    padding: 10px 22px;
+    border-radius: 6px;
+    font-weight: 600;
+  }
+  a.btn:hover { background: #4752c4; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1 id="status">Launching Counter-Strike 2…</h1>
+    <p id="detail"></p>
+    <code id="addr"></code>
+    <br>
+    <a class="btn" id="manual-link" href="#">Click here if nothing happened</a>
+    <p style="margin-top:18px; font-size:0.85rem;">
+      If Steam doesn't open, launch CS2, press <code>~</code> and type
+      <code id="console-cmd"></code>
+    </p>
+  </div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const server = params.get("server"); // expected format host:port
+
+  const detailEl = document.getElementById("detail");
+  const addrEl = document.getElementById("addr");
+  const linkEl = document.getElementById("manual-link");
+  const cmdEl = document.getElementById("console-cmd");
+  const statusEl = document.getElementById("status");
+
+  if (!server) {
+    statusEl.textContent = "No server specified";
+    detailEl.textContent = "This link is missing a ?server=host:port parameter.";
+    linkEl.style.display = "none";
+  } else {
+    const steamUrl = "steam://connect/" + server;
+    addrEl.textContent = server;
+    cmdEl.textContent = "connect " + server;
+    linkEl.href = steamUrl;
+    detailEl.textContent = "Your browser will ask to open Steam.";
+
+    // Attempt automatic redirect
+    window.location.href = steamUrl;
+  }
+</script>
+</body>
+</html>
